@@ -6,11 +6,11 @@ public class ProxyIdpConfig {
     /**
      * idp proxy type
      */
-    private String idpType;
+    private String alias;
     /**
-     * idpId which load from redis or database
+     * idp proxy type
      */
-    private String id;
+    private String idpType;
     /**
      * idp setting
      */
