@@ -78,18 +78,23 @@ public class IdpService {
     }
 
     public ProxyIdpConfig save(ProxyIdpConfig config) {
-        valueOperations.put(config.getId(), config);
+        valueOperations.put(config.getAlias(), config);
         return config;
     }
-
+    /**
+     * 
+     * @param idpType
+     * @return
+     */
+    @Deprecated
     public String generateId(String idpType){
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
         Long id = ops.increment("idp:id", 1);
         return idpType+"-"+id;
     }
 
-    public ProxyIdpConfig getById(String id) {
-        Object config = valueOperations.get(id);
+    public ProxyIdpConfig getByAlias(String alias) {
+        Object config = valueOperations.get(alias);
         if(null == config) {
             return null;
         }
@@ -100,8 +105,8 @@ public class IdpService {
         return new LinkedList<>(Objects.requireNonNull(valueOperations.values()));
     }
 
-    public void remove(String id) {
-        valueOperations.delete(id);
+    public void remove(String alias) {
+        valueOperations.delete(alias);
     }
     @Autowired
     private AuthStateRedisCache stateRedisCache;
@@ -126,13 +131,13 @@ public class IdpService {
      * @return
      */
     public ProxyIdpConfig caculate(ProxyIdpConfig idpConfig){
-        if("proxy".equalsIgnoreCase(idpConfig.getIdpType())&&Strings.isBlank(idpConfig.getId())){
-            throw new AuthException("please set id for full proxy mode");
-        }else if("proxy".equalsIgnoreCase(idpConfig.getIdpType())&&Strings.isNotBlank(idpConfig.getId())){
+        if(Strings.isBlank(idpConfig.getAlias())){
+            throw new AuthException("please set alias for idpConfig");
+        }else if("proxy".equalsIgnoreCase(idpConfig.getIdpType())){
             // for full proxy, load proxy from properteis or redis
-            ProxyIdpConfig localCfg = this.getById(idpConfig.getId());
+            ProxyIdpConfig localCfg = this.getByAlias(idpConfig.getAlias());
             if(localCfg==null){
-                localCfg= this.readIdpFromProperties(idpConfig.getId());
+                localCfg= this.readIdpFromProperties(idpConfig.getAlias());
             }
             if(Strings.isBlank(localCfg.getIdpType())||Strings.isBlank(localCfg.getClientId())||Strings.isBlank(localCfg.getClientSecret())){
                 throw new AuthException("idpType,clientId,clientSecret is required in full proxy mode");
@@ -140,10 +145,6 @@ public class IdpService {
             localCfg.setRedirectUri(idpConfig.getRedirectUri());
             idpConfig = localCfg;
         } 
-        // set id
-        if(Strings.isBlank(idpConfig.getId())){
-            idpConfig.setId(this.generateId(idpConfig.getIdpType()));
-        }
         this.save(idpConfig);
         return idpConfig;
     }

@@ -57,7 +57,7 @@ public class ProxyAuthController {
     @PostMapping("/register")
     @ResponseBody
     public AuthResponse<Map<String,String>> renderAuth(@RequestBody ProxyIdpConfig idpConfig, HttpServletResponse response) throws IOException {
-        LOG.info("render auth config：{}" + JSON.toJSONString(idpConfig));
+        LOG.info("register auth config：{}" + JSON.toJSONString(idpConfig));
         idpConfig.setRedirectUri("http://redirectUri");
         idpConfig = idpService.caculate(idpConfig);
         AuthRequest authRequest = idpService.getAuthRequest(idpConfig);
@@ -66,17 +66,16 @@ public class ProxyAuthController {
         AuthResponse<Map<String,String>> authResponse = new AuthResponse<>();
         Map<String,String> resultMap = new HashMap<>();
         resultMap.put("authorizeUrl", authorizeUrl);
-        resultMap.put("id", idpConfig.getId());
         resultMap.put("idpType", idpConfig.getIdpType());
         authResponse.setData(resultMap);
         authResponse.setCode(2000);
         return authResponse;
     }
 
-    @PostMapping("/render/{id}")
+    @PostMapping("/render/{alias}")
     @ResponseBody
-    public AuthResponse<Map<String,String>> renderAuth(@PathVariable String id,@RequestParam String redirectUri,@RequestParam String state, HttpServletResponse response) throws IOException {
-        ProxyIdpConfig config = idpService.getById(id);
+    public AuthResponse<Map<String,String>> renderAuth(@PathVariable String alias,@RequestParam String redirectUri,@RequestParam String state, HttpServletResponse response) throws IOException {
+        ProxyIdpConfig config = idpService.getByAlias(alias);
         config.setRedirectUri(redirectUri);
         LOG.info("render auth config：{}" + JSON.toJSONString(config));
         AuthRequest authRequest = idpService.getAuthRequest(config);
@@ -88,7 +87,6 @@ public class ProxyAuthController {
         AuthResponse<Map<String,String>> authResponse = new AuthResponse<>();
         Map<String,String> resultMap = new HashMap<>();
         resultMap.put("authorizeUrl", authorizeUrl);
-        resultMap.put("id", config.getId());
         resultMap.put("idpType", config.getIdpType());
         authResponse.setCode(2000);
         return authResponse;
@@ -97,10 +95,10 @@ public class ProxyAuthController {
     /**
      * proxy login api, return user data
      */
-    @PostMapping("/login/{id}")
-    public AuthResponse<AuthUser> login(@RequestBody IdpAuthCallback callback,@PathVariable String id,HttpServletRequest request) {
+    @PostMapping("/login/{alias}")
+    public AuthResponse<AuthUser> login(@RequestBody IdpAuthCallback callback,@PathVariable String alias,HttpServletRequest request) {
         LOG.info("callback：{}" , JSONObject.toJSONString(callback));
-        ProxyIdpConfig config = idpService.getById(id);
+        ProxyIdpConfig config = idpService.getByAlias(alias);
         LOG.debug("config={}",JSONObject.toJSONString(config));
         config.setRedirectUri(callback.getRedirectUri());
         AuthRequest authRequest = idpService.getAuthRequest(config);
@@ -113,10 +111,10 @@ public class ProxyAuthController {
         return response;
     }
 
-    @RequestMapping("/revoke/{id}/{uuid}")
+    @RequestMapping("/revoke/{alias}/{uuid}")
     @ResponseBody
-    public Response revokeAuth(@PathVariable("id") String id, @PathVariable("uuid") String uuid) throws IOException {
-        ProxyIdpConfig config = idpService.getById(id);
+    public Response revokeAuth(@PathVariable("alias") String id, @PathVariable("uuid") String uuid) throws IOException {
+        ProxyIdpConfig config = idpService.getByAlias(id);
         AuthRequest authRequest = idpService.getAuthRequest(config);
         AuthUser user = userService.getByUuidAndSource(uuid,config.getIdpType());
         if (null == user) {
@@ -136,10 +134,10 @@ public class ProxyAuthController {
     }
     
 
-    @RequestMapping("/refresh/{id}/{uuid}")
+    @RequestMapping("/refresh/{alias}/{uuid}")
     @ResponseBody
-    public Object refreshAuth(@PathVariable("id") String id, @PathVariable("uuid") String uuid) {
-        ProxyIdpConfig config = idpService.getById(id);
+    public Object refreshAuth(@PathVariable("alias") String alias, @PathVariable("uuid") String uuid) {
+        ProxyIdpConfig config = idpService.getByAlias(alias);
         AuthRequest authRequest = idpService.getAuthRequest(config);
         AuthUser user = userService.getByUuidAndSource(uuid,config.getIdpType());
         if (null == user) {
