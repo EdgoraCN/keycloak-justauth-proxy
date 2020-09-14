@@ -14,7 +14,8 @@ bitnami/redis:5.0.8
 
 * start keycloak justauth proxy wit docker
 
-```docker run -d  --name justauth-proxy --restart=always \
+```bash
+docker run -d  --name justauth-proxy --restart=always \
    -e SPINRG_REDIS_HOST=redis \
     -e SPINRG_REDIS_PASSWORD=passwd \
     -e SPINRG_REDIS_PORT=6379 \
