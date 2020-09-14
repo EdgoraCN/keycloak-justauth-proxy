@@ -162,10 +162,10 @@ public class IdpService {
         AuthConfigBuilder builder = createAuthConfig(idpConfig);
         switch (source.toLowerCase()) {
             case "dingtalk":
-                authRequest = new AuthDingTalkRequest(builder.build());
+                authRequest = new AuthDingTalkRequest(builder.build(),stateRedisCache);
                 break;
             case "baidu":
-                authRequest = new AuthBaiduRequest(builder.build());
+                authRequest = new AuthBaiduRequest(builder.build(),stateRedisCache);
                 break;
             case "github":
                 authRequest = new AuthGithubRequest(builder.build(), stateRedisCache);
@@ -174,96 +174,96 @@ public class IdpService {
                 authRequest = new AuthGiteeRequest(builder.build(), stateRedisCache);
                 break;
             case "weibo":
-                authRequest = new AuthWeiboRequest(builder.build());
+                authRequest = new AuthWeiboRequest(builder.build(),stateRedisCache);
                 break;
             case "coding":
                 builder = builder.codingGroupName(idpConfig.getCodingGroupName());
-                authRequest = new AuthCodingRequest(builder.build());
+                authRequest = new AuthCodingRequest(builder.build(),stateRedisCache);
                 break;
             case "oschina":
-                authRequest = new AuthOschinaRequest(builder.build());
+                authRequest = new AuthOschinaRequest(builder.build(),stateRedisCache);
                 break;
             case "alipay":
                 // 支付宝在创建回调地址时，不允许使用localhost或者127.0.0.1，所以这儿的回调地址使用的局域网内的ip
                 builder = builder.alipayPublicKey(idpConfig.getAlipayPublicKey());
-                authRequest = new AuthAlipayRequest(builder.build());
+                authRequest = new AuthAlipayRequest(builder.build(),stateRedisCache);
                 break;
             case "qq":
-                authRequest = new AuthQqRequest(builder.build());
+                authRequest = new AuthQqRequest(builder.build(),stateRedisCache);
                 break;
             case "wechat_open":
-                authRequest = new AuthWeChatOpenRequest(builder.build());
+                authRequest = new AuthWeChatOpenRequest(builder.build(),stateRedisCache);
                 break;
             case "csdn":
-                authRequest = new AuthCsdnRequest(builder.build());
+                authRequest = new AuthCsdnRequest(builder.build(),stateRedisCache);
                 break;
             case "taobao":
-                authRequest = new AuthTaobaoRequest(builder.build());
+                authRequest = new AuthTaobaoRequest(builder.build(),stateRedisCache);
                 break;
             case "google":
-                authRequest = new AuthGoogleRequest(builder.build());
+                authRequest = new AuthGoogleRequest(builder.build(),stateRedisCache);;
                 break;
             case "facebook":
-                authRequest = new AuthFacebookRequest(builder.build());
+                authRequest = new AuthFacebookRequest(builder.build(),stateRedisCache);
                 break;
             case "douyin":
-                authRequest = new AuthDouyinRequest(builder.build());
+                authRequest = new AuthDouyinRequest(builder.build(),stateRedisCache);
                 break;
             case "linkedin":
-                authRequest = new AuthLinkedinRequest(builder.build());
+                authRequest = new AuthLinkedinRequest(builder.build(),stateRedisCache);
                 break;
             case "microsoft":
-                authRequest = new AuthMicrosoftRequest(builder.build());
+                authRequest = new AuthMicrosoftRequest(builder.build(),stateRedisCache);
                 break;
             case "mi":
-                authRequest = new AuthMiRequest(builder.build());
+                authRequest = new AuthMiRequest(builder.build(),stateRedisCache);
                 break;
             case "toutiao":
-                authRequest = new AuthToutiaoRequest(builder.build());
+                authRequest = new AuthToutiaoRequest(builder.build(),stateRedisCache);
                 break;
             case "teambition":
-                authRequest = new AuthTeambitionRequest(builder.build());
+                authRequest = new AuthTeambitionRequest(builder.build(),stateRedisCache);
                 break;
             case "pinterest":
-                authRequest = new AuthPinterestRequest(builder.build());
+                authRequest = new AuthPinterestRequest(builder.build(),stateRedisCache);
                 break;
             case "renren":
-                authRequest = new AuthRenrenRequest(builder.build());
+                authRequest = new AuthRenrenRequest(builder.build(),stateRedisCache);
                 break;
             case "stack_overflow":
                 builder = builder.stackOverflowKey(idpConfig.getStackOverflowKey());
-                authRequest = new AuthStackOverflowRequest(builder.build());
+                authRequest = new AuthStackOverflowRequest(builder.build(),stateRedisCache);
                 break;
             case "huawei":
-                authRequest = new AuthHuaweiRequest(builder.build());
+                authRequest = new AuthHuaweiRequest(builder.build(),stateRedisCache);
                 break;
             case "wechat_enterprise":
                 builder = builder.agentId(idpConfig.getAgentId());
-                authRequest = new AuthWeChatEnterpriseRequest(builder.build());
+                authRequest = new AuthWeChatEnterpriseRequest(builder.build(),stateRedisCache);
                 break;
             case "kujiale":
-                authRequest = new AuthKujialeRequest(builder.build());
+                authRequest = new AuthKujialeRequest(builder.build(),stateRedisCache);
                 break;
             case "gitlab":
-                authRequest = new AuthGitlabRequest(builder.build());
+                authRequest = new AuthGitlabRequest(builder.build(),stateRedisCache);
                 break;
             case "meituan":
-                authRequest = new AuthMeituanRequest(builder.build());
+                authRequest = new AuthMeituanRequest(builder.build(),stateRedisCache);
                 break;
             case "eleme":
-                authRequest = new AuthElemeRequest(builder.build());
+                authRequest = new AuthElemeRequest(builder.build(),stateRedisCache);
                 break;
             case "mygitlab":
-                authRequest = new AuthMyGitlabRequest(builder.build());
+                authRequest = new AuthMyGitlabRequest(builder.build(),stateRedisCache);
                 break;
             case "twitter":
-                authRequest = new AuthTwitterRequest(builder.build());
+                authRequest = new AuthTwitterRequest(builder.build(),stateRedisCache);
                 break;
             case "wechat_mp":
-                authRequest = new AuthWeChatMpRequest(builder.build());
+                authRequest = new AuthWeChatMpRequest(builder.build(),stateRedisCache);
                 break;
             case "aliyun":
-                authRequest = new AuthAliyunRequest(builder.build());
+                authRequest = new AuthAliyunRequest(builder.build(),stateRedisCache);
                 break;
             default:
                 break;
