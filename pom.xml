@@ -108,7 +108,7 @@
 						</to>
 						<container>
 							<entrypoint>
-								<shell>bash</shell>
+								<shell>sh</shell>
 								<option>-c</option>
 								<arg>chmod +x /entrypoint.sh &amp;&amp; sync &amp;&amp;
 									/entrypoint.sh</arg>
