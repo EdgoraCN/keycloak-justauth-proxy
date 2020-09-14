@@ -101,7 +101,7 @@
 					<version>2.5.2</version>
 					<configuration>
 						<from>
-							<image>fq8upf2e.mirror.aliyuncs.com/adoptopenjdk/openjdk8:alpine-jre</image>
+							<image>fq8upf2e.mirror.aliyuncs.com/adoptopenjdk/openjdk11:alpine-jre</image>
 						</from>
 						<to>
 							<image>edgora/keycloak-justauth-proxy</image>
